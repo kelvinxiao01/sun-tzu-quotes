@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ChatInput from "./ChatInput";
 import MessageList from "./MessageList";
 import "../styles/ChatApp.css";
@@ -10,6 +10,10 @@ function ChatApp() {
   //     setMessages([...messages, newMessage]);
   //   };
   const handleSendMessage = async (newMessage) => {
+    setMessages((messages) => [
+      ...messages,
+      { text: newMessage, sender: "user" },
+    ]);
     try {
       const response = await fetch("http://localhost:3001/send-message", {
         method: "POST",
@@ -20,16 +24,18 @@ function ChatApp() {
       });
 
       const data = await response.json();
+      console.log(data);
       // handle the response...
 
-      setMessages((messages) => [
-        ...messages,
-        { text: data.choices[0].text, sender: "ai" },
-      ]);
+      setMessages((messages) => [...messages, { text: data, sender: "ai" }]);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  console.log(messages);
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
 
   return (
     <div className="chat-app">

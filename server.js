@@ -54,6 +54,7 @@ app.post("/send-message", async (req, res) => {
     });
 
     var api_response = completion.choices[0].message.content;
+    res.json(completion.choices[0].message.content);
     console.log(api_response);
   } catch (error) {
     console.error("Error calling OpenAI API:", error);
